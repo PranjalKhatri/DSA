@@ -1,0 +1,5 @@
+git config :
+git init : initializes the git in the pwd
+git status : tells the status of local repo
+git log : gives lof of previous commits
+git diff : compares with prev commit
