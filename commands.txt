@@ -2,4 +2,130 @@ git config :
 git init : initializes the git in the pwd
 git status : tells the status of local repo
 git log : gives lof of previous commits
-git diff : compares with prev commit
+git diff : compares staging area with working dir
+git diff --staged: compares staging area with prev commit
+git rm f_name: deletes {f_name} and then stages
+git mv o_name n-name : renames and stages
+git rm --cached f_name : stops tracking file
+git clone : clone repository to your folder
+git add . : tracks changes in the repository
+git commit -m "your message": saves to git
+git push: upload git commits to remote etc.
+git pull : download changes from remote repo to your folder,opposite of push
+git checkout -b name : creates a new branch named name and takes you there
+git checkout branch_name : switches to the branch_name
+git branch -v : displays last commit message of different branches
+git branch --merged : tells the branches which are already merged
+git branch --no-merged : tells the branches which are not already merged
+git branch -d {branch_name} : deletes the branch
+git branch : gives the name of current branch
+git remote add origin {link} : links the repo
+git remote -v : tells where you are pulling and pushing to
+git branch -m {new name} : changes name
+git push origin {branch_name} : pushes to remote
+git push origin {branch_name}:{branch to show} : pushes {branch_name} under {branch to show}
+git push -d origin {branch_name} : deletes the branch
+git checkout --f_name : 
+:)
+All used Commands in GIT :-
+To Initialised a git repository       -> git init 
+
+To add your name                      -> git config --global user.name "Enter your desired name"
+
+To add your email                     -> git config --global user.email "Enter your email address"
+
+To See our Previous Commit            -> git log
+
+To see our Name , email               -> git config --list
+
+To Add all files to staging area      -> git add --a
+
+To Commit All the changes             -> git commit -m "Enter text to be shown here"
+
+To Delete a git repository            -> rm -rf .git   ("Proper Spacing should be there")
+
+To Make a file using command          -> touch filename.extension 
+
+To see previously run command         -> directly write "history"
+
+
+
+******************(To ignore some git file lets say .log file we can do it simply by creating a .gitignore file and just put a name into 
+it but if you mistakenly generated a lot of  log file then just simply write .log in the .gitignore file.)****************************
+
+
+
+To see what changes are made          -> git diff
+
+To track the changes that are staged  -> git diff --staged 
+but not committed
+
+To skip the staging area we can use   -> git commit -a -m "Any Message you want to print"
+
+To Remove any file                    -> git rm file.txt
+
+To rename any file                    -> git mv oldfilename newfilename
+
+To Untrack a file                     -> git rm --cached filename
+
+
+(if we put a file under .gitignore which is previously on tracking then it will also get tracked beacuse it was previouslly staged so to unstage this we have 
+to write a command "git rm --cached filename.extension")
+
+
+To see in detail what Changes are     -> git log -p
+occur 
+
+To see in detail what Changes are     -> git log -p / git log -p -2
+occur / and if in last 2/3 commit
+
+To see changes in Summary/Short       -> git log --stat
+Form 
+ 
+To see changes in online we use       -> git log --pretty=oneline
+
+To Filter commit's on time            -> git log --since=2.days/months/years/weeks
+
+To change the format of commit        > git log --pretty=format:"%h - %an --%ae"  (WebR->git-scm.com/docs/git-log)
+
+To amend a git commit                 -> git commit --amend (It will open a vim editor to escape it just press esc and write :wq to exit)
+
+To unstage a file                     -> git restore --staged filename.extension / git restore filename.extension
+
+To restore the data on previous 
+commit of a particular file           > git checkout - filename.extension 
+
+To match current position with 
+previous commit for all file          -> git checkout -f
+
+
+video number 13
+
+To push any changes to git we 
+first need to add a remote 
+path                                  -> git remote add origin https://github.com/IC-XOrbit-07/sampletest.git (can get it from github under your repo sec.)
+
+
+To check added path                   -> git remote -v
+
+To add a new branch                   -> git checkout -b newBranchName 
+
+To return back to master branch       -> git checkout master 
+
+To check all available branch         -> git branch 
+
+To merge all the branches             -> git merge subbranchname
+
+To see all branches and thier last 
+commit with hash                      -> git branch -v
+
+To see all the merged branches        -> git branch --merged 
+
+To see not merged branches            -> git branch --no -merged 
+
+To delete a git branch                -> git branch -d "branch name to be deleted"
+
+To remove a added path                -> git remote rm origin/name 
+
+
+if we want to see our various branches then we have to push it also by the command "git push origin branchNameHere"
