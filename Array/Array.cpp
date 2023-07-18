@@ -74,11 +74,19 @@ public:
         T temp;
         for (int i = pos; i < (used_size-1); i++)
         {
-            temp = arr[i+1];
-            arr[i] = temp;
+            arr[i] = arr[i+1];
         }
         used_size--;
     }
+
+    int linear_search(T ele){
+        for (int i = 0; i < used_size; i++)
+        {
+            if(arr[i] == ele){return i;}
+        }
+        return -1;
+    }
+
 };
 
 int main()
@@ -89,8 +97,7 @@ int main()
     m[2] = 3;
     m[3] = 4;
     m.show();
-    m.remove_at(1);
-    m.show();
+   
 
     return 0;
 }
