@@ -39,7 +39,7 @@ public:
     {
         delete[] arr;
     }
-    
+
     ~Array()
     {
         delete[] arr;
@@ -52,41 +52,71 @@ public:
 
     void insert_at(T ele, int pos)
     {
-        if (used_size > (total_size-1))
+        if (used_size > (total_size - 1))
         {
-            cout<<"Array out of bounds\n";
+            cout << "Array out of bounds\n";
             return;
         }
         used_size++;
         T temp = arr[pos];
         arr[pos] = ele;
-        for (int i = (pos+1); i < used_size; i++)
+        for (int i = (pos + 1); i < used_size; i++)
         {
             arr[i] = temp;
-            temp = arr[i+1]; 
+            temp = arr[i + 1];
         }
         arr[used_size] = temp;
         // used_size++;
     }
 
-    void remove_at(int pos){
-        if(pos < 0){return;}
-        T temp;
-        for (int i = pos; i < (used_size-1); i++)
+    void remove_at(int pos)
+    {
+        if (pos < 0)
         {
-            arr[i] = arr[i+1];
+            return;
+        }
+        T temp;
+        for (int i = pos; i < (used_size - 1); i++)
+        {
+            arr[i] = arr[i + 1];
         }
         used_size--;
     }
 
-    int linear_search(T ele){
+    int linear_search(T ele)
+    {
         for (int i = 0; i < used_size; i++)
         {
-            if(arr[i] == ele){return i;}
+            if (arr[i] == ele)
+            {
+                return i;
+            }
         }
         return -1;
     }
 
+    int binary_search(T ele, int s, int e)
+    {
+        // cout<<"iter\n";
+        if (s > e)
+        {
+            return -1;
+        }
+        int mid = int((s + e) / 2);
+        if (arr[mid] == ele)
+        {
+            // cout<<"duh";
+            return mid;
+        }
+        else if (arr[mid] > ele)
+        {
+            return binary_search(ele, s, mid - 1);
+        }
+        else
+        {
+            return binary_search(ele, mid + 1, e);
+        }
+    }
 };
 
 int main()
@@ -97,7 +127,7 @@ int main()
     m[2] = 3;
     m[3] = 4;
     m.show();
-   
+    cout<<m.binary_search(2, 0, 4);
 
     return 0;
 }
