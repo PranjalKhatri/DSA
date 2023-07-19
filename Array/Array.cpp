@@ -97,25 +97,26 @@ public:
 
     int binary_search(T ele, int s, int e)
     {
-        // cout<<"iter\n";
-        if (s > e)
+        int mid;
+        while (s <= e)
         {
-            return -1;
+
+            mid = int((s + e) / 2);
+            if (arr[mid] == ele)
+            {
+                // cout<<"duh";
+                return mid;
+            }
+            else if (arr[mid] > ele)
+            {
+                e = mid - 1;
+            }
+            else
+            {
+                s = mid + 1;
+            }
         }
-        int mid = int((s + e) / 2);
-        if (arr[mid] == ele)
-        {
-            // cout<<"duh";
-            return mid;
-        }
-        else if (arr[mid] > ele)
-        {
-            return binary_search(ele, s, mid - 1);
-        }
-        else
-        {
-            return binary_search(ele, mid + 1, e);
-        }
+        return -1;
     }
 };
 
@@ -127,7 +128,7 @@ int main()
     m[2] = 3;
     m[3] = 4;
     m.show();
-    cout<<m.binary_search(2, 0, 4);
+    cout << m.binary_search(5, 0, 4);
 
     return 0;
 }
