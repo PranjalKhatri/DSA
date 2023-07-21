@@ -85,7 +85,7 @@ public:
     void free()
     {
         Node<T> *dum;
-        do
+        do.
         {
             dum = start;
             cout << "deleted " << start->val << endl;
