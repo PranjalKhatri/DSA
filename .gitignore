@@ -1,2 +1,4 @@
 *.o
 *.exe
+/linkedlist/*.exe
+/Array/*.exe
