@@ -90,7 +90,7 @@ public:
             dum = start;
             cout << "deleted " << start->val << endl;
             start = start->next;
-            delete dum;
+            delete dum;.
         } while (start != nullptr);
         // delete dum;
     }
