@@ -203,6 +203,12 @@ public:
 
     void push(T v)
     {
+        if(head == nullptr){
+            head= new Node<T>;
+            head->val = v;
+            head->next = head;
+            return;
+        }
         Node<T>* n = new Node<T>;
         n->val = v;
         Node<T>* hd = head;
@@ -220,12 +226,22 @@ public:
         {
             cout<<dm->val<<endl;
             dm = dm->next;
-        } while (dm->next != head);
+        } while (dm != head);
         
     }
 
-    void pop(){
-        
+    void pop()
+    {
+        if(head == nullptr){return;}
+        if(head->next == head){
+            head = nullptr;
+        }
+        Node<T> * d = head;
+        while(d->next->next != head){
+            d= d->next;
+        }
+        delete d->next;
+        d->next = head;
     }
 };
 
@@ -235,6 +251,9 @@ int main()
     circular_linkedlist<int> cll(10);
     cll.push(11);
     cll.push(12);
+    cll.push(13);
+    cll.show();
+    cll.pop();
     cll.show();
     return 0;
 }
