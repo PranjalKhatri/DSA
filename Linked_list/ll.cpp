@@ -220,6 +220,18 @@ public:
         hd->next = n;
     }
 
+    void Insert_at_head(T v){
+        Node<T> *n = new Node<T>;
+        n->val = v;
+        n->next = head;
+        Node<T>* dum = head;
+        while(dum->next != head){
+            dum = dum->next;
+        }
+        dum->next = n;
+        head = n;
+    }
+
     void show(){
         Node<T> *dm = head;
         do
@@ -253,7 +265,7 @@ int main()
     cll.push(12);
     cll.push(13);
     cll.show();
-    cll.pop();
+    cll.Insert_at_head(9);
     cll.show();
     return 0;
 }
