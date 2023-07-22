@@ -29,6 +29,11 @@ public:
         start->val = v;
     }
 
+    Node<T> * gethead(void)
+    {
+        return start;
+    }
+
     void push(T v)
     {
         Node<T> *n = new Node<T>;
@@ -72,20 +77,30 @@ public:
 
     void Insert_at_end(T v)
     {
+        push(v);
+    }
+
+    void remove_head(){
         Node<T> * dum = start;
-        while (dum->next != nullptr)
+        start = start->next;
+        delete dum;
+    }
+
+    void pop(void)
+    {
+        Node<T>* dum = start;
+        while (dum->next->next != nullptr)
         {
-            dum = dum->next;
+            dum = dum->next;    
         }
-        Node<T>* n = new Node<T>;
-        n->val = v;
-        dum->next = n;
+        delete dum->next;
+        dum->next = nullptr;
     }
 
     void free()
     {
         Node<T> *dum;
-        do.
+        do
         {
             dum = start;
             cout << "deleted " << start->val << endl;
@@ -129,6 +144,9 @@ int main()
     ll.Insert_at_start(9);
     ll.Insert_at_Index(14, 1);
     ll.Insert_at_end(150);
+    ll.show();
+    ll.remove_head();
+    ll.pop();
     ll.show();
     ll.free();
     cout << "end\n";
