@@ -7,14 +7,14 @@ template <class T>
 struct Node
 {
     T val;
-    Node *next = nullptr;
+    Node* next = nullptr;
 };
 
 template <class T>
 class LinkedList
 {
 private:
-    Node<T> *start;
+    Node<T>* start;
 
 public:
     LinkedList()
@@ -29,16 +29,16 @@ public:
         start->val = v;
     }
 
-    Node<T> * gethead(void)
+    Node<T>* gethead(void)
     {
         return start;
     }
 
     void push(T v)
     {
-        Node<T> *n = new Node<T>;
+        Node<T>* n = new Node<T>;
         n->val = v;
-        Node<T> *dum = start;
+        Node<T>* dum = start;
         while (dum->next != nullptr)
         {
             dum = dum->next;
@@ -49,7 +49,7 @@ public:
 
     void Insert_at_start(T v)
     {
-        Node<T> *n = new Node<T>;
+        Node<T>* n = new Node<T>;
         n->next = start->next;
         n->val = start->val;
         start->next = n;
@@ -59,8 +59,8 @@ public:
 
     void Insert_at_Index(T v, int i)
     {
-        Node<T> *dum = start;
-        for (int j = 0; j < (i-1); j++)
+        Node<T>* dum = start;
+        for (int j = 0; j < (i - 1); j++)
         {
             if (dum->next == nullptr)
             {
@@ -69,7 +69,7 @@ public:
             }
             dum = dum->next;
         }
-        Node<T> *n = new Node<T>;
+        Node<T>* n = new Node<T>;
         n->val = v;
         n->next = dum->next;
         dum->next = n;
@@ -80,8 +80,8 @@ public:
         push(v);
     }
 
-    void remove_head(){
-        Node<T> * dum = start;
+    void remove_head() {
+        Node<T>* dum = start;
         start = start->next;
         delete dum;
     }
@@ -91,15 +91,47 @@ public:
         Node<T>* dum = start;
         while (dum->next->next != nullptr)
         {
-            dum = dum->next;    
+            dum = dum->next;
         }
         delete dum->next;
         dum->next = nullptr;
     }
 
+    void remove_val(T v)
+    {
+        Node<T>* dum = start;
+        if (start->val == v) {
+            remove_head();
+            return;
+        }
+        while (dum->next->val != v)
+        {
+            if (dum == nullptr) {
+                cout << "out of bounds\n";
+                return;
+            }
+            dum = dum->next;
+        }
+        Node<T>* d2 = dum->next->next;
+        delete dum->next;
+        dum->next = d2;
+    }
+
+    void remove_at_index(int i)
+    {
+        Node<T> * dum = start;
+        for (int j = 0; j < (i-1); j++)
+        {
+            dum = dum->next;
+        }
+        Node<T> *d2 = dum->next->next;
+        delete dum->next;
+        dum->next = d2;
+    }
+
     void free()
     {
-        Node<T> *dum;
+        Node<T>* dum;
         do
         {
             dum = start;
@@ -112,18 +144,18 @@ public:
 
     void show()
     {
-        Node<T> *dummy = start;
+        Node<T>* dummy = start;
         while (dummy != nullptr)
         {
-            cout<<dummy->val<<endl;
+            cout << dummy->val << endl;
             dummy = dummy->next;
         }
-        
+
     }
 
     ~LinkedList()
     {
-        Node<T> *dum;
+        Node<T>* dum;
         while (start != nullptr)
         {
             dum = start;
@@ -141,12 +173,8 @@ int main()
     ll.push(11);
     ll.push(12);
     ll.push(13);
-    ll.Insert_at_start(9);
-    ll.Insert_at_Index(14, 1);
-    ll.Insert_at_end(150);
     ll.show();
-    ll.remove_head();
-    ll.pop();
+    ll.remove_at_index(1);
     ll.show();
     ll.free();
     cout << "end\n";
