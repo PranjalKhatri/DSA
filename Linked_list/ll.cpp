@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 template <class T>
@@ -15,11 +15,12 @@ class LinkedList
 {
 private:
     Node<T>* start;
-
+    int size;
 public:
     LinkedList()
     {
         start = nullptr;
+        size = 1;
     }
 
     LinkedList(T v)
@@ -27,6 +28,7 @@ public:
         start = new Node<T>;
         start->next = nullptr;
         start->val = v;
+        size = 1;
     }
 
     Node<T>* gethead(void)
@@ -39,11 +41,18 @@ public:
         Node<T>* n = new Node<T>;
         n->val = v;
         Node<T>* dum = start;
+        if (start == nullptr)
+        {
+            start->val = v;
+            return;
+        }
+        
         while (dum->next != nullptr)
         {
             dum = dum->next;
         }
         dum->next = n;
+        size++;
         // while(star)
     }
 
@@ -54,6 +63,7 @@ public:
         n->val = start->val;
         start->next = n;
         start->val = v;
+        size++;
         // start = start->next;
     }
 
@@ -73,6 +83,7 @@ public:
         n->val = v;
         n->next = dum->next;
         dum->next = n;
+        size++;
     }
 
     void Insert_at_end(T v)
@@ -84,6 +95,7 @@ public:
         Node<T>* dum = start;
         start = start->next;
         delete dum;
+        size--;
     }
 
     void pop(void)
@@ -95,6 +107,7 @@ public:
         }
         delete dum->next;
         dum->next = nullptr;
+        size--;
     }
 
     void remove_val(T v)
@@ -115,22 +128,25 @@ public:
         Node<T>* d2 = dum->next->next;
         delete dum->next;
         dum->next = d2;
+        size--;
     }
 
     void remove_at_index(int i)
     {
-        Node<T> * dum = start;
-        for (int j = 0; j < (i-1); j++)
+        Node<T>* dum = start;
+        for (int j = 0; j < (i - 1); j++)
         {
             dum = dum->next;
         }
-        Node<T> *d2 = dum->next->next;
+        Node<T>* d2 = dum->next->next;
         delete dum->next;
+        size--;
         dum->next = d2;
     }
 
     void free()
     {
+        size = 0;
         Node<T>* dum;
         do
         {
@@ -153,6 +169,8 @@ public:
 
     }
 
+    int get_size(){return size;}
+
     ~LinkedList()
     {
         Node<T>* dum;
@@ -166,17 +184,57 @@ public:
     }
 };
 
+template <class T>
+class circular_linkedlist
+{
+private:
+    Node<T>* head;
+public:
+    
+    circular_linkedlist() { head = new Node<T>; }
+    
+    circular_linkedlist(T v)
+    {
+        head = new Node<T>;
+        head->next = head;
+        head->val = v;
+        // cout<<":)";
+    }
+
+    void push(T v)
+    {
+        Node<T>* n = new Node<T>;
+        n->val = v;
+        Node<T>* hd = head;
+        while (hd->next != head)
+        {
+            hd = hd->next;   
+        }
+        n->next = head;
+        hd->next = n;
+    }
+
+    void show(){
+        Node<T> *dm = head;
+        do
+        {
+            cout<<dm->val<<endl;
+            dm = dm->next;
+        } while (dm->next != head);
+        
+    }
+
+    void pop(){
+        
+    }
+};
+
 int main()
 {
 
-    LinkedList<int> ll(10);
-    ll.push(11);
-    ll.push(12);
-    ll.push(13);
-    ll.show();
-    ll.remove_at_index(1);
-    ll.show();
-    ll.free();
-    cout << "end\n";
+    circular_linkedlist<int> cll(10);
+    cll.push(11);
+    cll.push(12);
+    cll.show();
     return 0;
 }
