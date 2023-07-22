@@ -1,4 +1,6 @@
 *.o
 *.exe
-/linkedlist/*.exe
+/Linked_list/*.exe
 /Array/*.exe
+/Array/test.cpp
+/Linked_list/test.cpp
