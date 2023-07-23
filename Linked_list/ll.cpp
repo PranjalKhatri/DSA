@@ -246,26 +246,45 @@ public:
     {
         if(head == nullptr){return;}
         if(head->next == head){
+            cout<<"popped head \n";
             head = nullptr;
         }
         Node<T> * d = head;
         while(d->next->next != head){
             d= d->next;
         }
+        cout<<"popped "<<d->next->val<<endl;
         delete d->next;
         d->next = head;
+    }
+
+    void free(){
+        // Node<T>* dum = head;
+        while (head != nullptr)
+        {
+            
+            pop();
+        }
+        
+    }
+
+    ~circular_linkedlist()
+    {
+        free();
     }
 };
 
 int main()
 {
-
+    
     circular_linkedlist<int> cll(10);
     cll.push(11);
     cll.push(12);
     cll.push(13);
     cll.show();
     cll.Insert_at_head(9);
+    cll.show();
+    cll.free();
     cll.show();
     return 0;
 }
