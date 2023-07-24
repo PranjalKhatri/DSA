@@ -246,14 +246,14 @@ public:
     {
         if(head == nullptr){return;}
         if(head->next == head){
-            cout<<"popped head \n";
+            // cout<<"popped head \n";
             head = nullptr;
         }
         Node<T> * d = head;
         while(d->next->next != head){
             d= d->next;
         }
-        cout<<"popped "<<d->next->val<<endl;
+        // cout<<"popped "<<d->next->val<<endl;
         delete d->next;
         d->next = head;
     }
