@@ -1,13 +1,20 @@
 #include <iostream>
-#include <bits/stdc++.h>
+
 using namespace std;
 
 template <class T>
-
 struct Node
 {
     T val;
     Node* next = nullptr;
+};
+
+template <class T>
+struct Dll_node
+{
+    Dll_node<T>* prev = nullptr;
+    T val;
+    Dll_node<T>* next = nullptr;
 };
 
 template <class T>
@@ -46,7 +53,7 @@ public:
             start->val = v;
             return;
         }
-        
+
         while (dum->next != nullptr)
         {
             dum = dum->next;
@@ -169,7 +176,7 @@ public:
 
     }
 
-    int get_size(){return size;}
+    int get_size() { return size; }
 
     ~LinkedList()
     {
@@ -190,9 +197,9 @@ class circular_linkedlist
 private:
     Node<T>* head;
 public:
-    
+
     circular_linkedlist() { head = new Node<T>; }
-    
+
     circular_linkedlist(T v)
     {
         head = new Node<T>;
@@ -203,8 +210,8 @@ public:
 
     void push(T v)
     {
-        if(head == nullptr){
-            head= new Node<T>;
+        if (head == nullptr) {
+            head = new Node<T>;
             head->val = v;
             head->next = head;
             return;
@@ -214,32 +221,32 @@ public:
         Node<T>* hd = head;
         while (hd->next != head)
         {
-            hd = hd->next;   
+            hd = hd->next;
         }
         n->next = head;
         hd->next = n;
     }
 
-    void Insert_at_head(T v){
-        Node<T> *n = new Node<T>;
+    void Insert_at_head(T v) {
+        Node<T>* n = new Node<T>;
         n->val = v;
         n->next = head;
         Node<T>* dum = head;
-        while(dum->next != head){
+        while (dum->next != head) {
             dum = dum->next;
         }
         dum->next = n;
         head = n;
     }
 
-    void show(){
-        Node<T> *dm = head;
+    void show() {
+        Node<T>* dm = head;
         do
         {
-            cout<<dm->val<<endl;
+            cout << dm->val << endl;
             dm = dm->next;
         } while (dm != head);
-        
+
     }
 
     void pop()
@@ -249,23 +256,39 @@ public:
             // cout<<"popped head \n";
             head = nullptr;
         }
-        Node<T> * d = head;
-        while(d->next->next != head){
-            d= d->next;
+        Node<T>* d = head;
+        while (d->next->next != head) {
+            d = d->next;
         }
         // cout<<"popped "<<d->next->val<<endl;
         delete d->next;
         d->next = head;
     }
 
-    void free(){
+    void remove_head()
+    {
+        if (head->next == head) { head = nullptr; }
+        Node<T>* dum = head;
+        Node<T>* a = head;
+        while (dum->next != head)
+        {
+            dum = dum->next;
+        }
+        dum->next = head->next;
+        delete head;
+        head = dum->next;
+        // o->o
+        // |__|
+    }
+
+    void free() {
         // Node<T>* dum = head;
         while (head != nullptr)
         {
-            
+
             pop();
         }
-        
+
     }
 
     ~circular_linkedlist()
@@ -274,17 +297,94 @@ public:
     }
 };
 
+template <class T>
+class Doubly_linkedlist
+{
+private:
+    Dll_node<T>* head;
+public:
+
+    Doubly_linkedlist() {
+        head = nullptr;
+    }
+    Doubly_linkedlist(T v)
+    {
+        head = new Dll_node<T>;
+        head->val = v;
+    }
+    void push(T v)
+    {
+        if(head == nullptr){
+            head = new Dll_node<T>;
+            head->val=v;
+            return;
+        }
+
+        Dll_node<T>* n = new Dll_node<T>;
+        n->val = v;
+        Dll_node<T>* dum = head;
+        while (dum->next != nullptr)
+        {
+            dum = dum->next;
+        }
+        dum->next = n;
+        n->prev = dum;
+    }
+    void Insert_at_head(T v)
+    {
+        Dll_node<T> * n = new Dll_node<T>;
+        n->val = v;
+        head->prev = n;
+        n->next = head;
+        head = n;
+    }
+    void pop()
+    {
+        if(head == nullptr || head->next == nullptr){
+            head = nullptr;
+            return;
+        }
+        Dll_node<T> * dum = new Dll_node<T>;
+        while (dum->next->next != nullptr)
+        {
+            dum = dum->next;
+        }
+        delete dum->next;
+        dum->next = nullptr;
+    }
+    void show()
+    {
+        Dll_node<T>* dum = head;
+        while (dum != nullptr)
+        {
+            cout << dum->val << endl;
+            dum = dum->next;
+        }
+    }
+    void free(){
+        Dll_node<T>* dum = head;
+        while (head != nullptr)
+        {
+            dum = head->next;
+            cout<<"deleted "<<head->val<<endl;
+            delete head;
+            head = dum;   
+        }
+        
+    }
+    ~Doubly_linkedlist(){
+        free();
+    }
+};
+
 int main()
 {
-    
-    circular_linkedlist<int> cll(10);
-    cll.push(11);
-    cll.push(12);
-    cll.push(13);
-    cll.show();
-    cll.Insert_at_head(9);
-    cll.show();
-    cll.free();
-    cll.show();
+    Doubly_linkedlist<int> dll;
+    dll.push(9);
+    dll.push(10);
+    dll.push(11);
+    dll.show();
+    dll.Insert_at_head(8);
+    dll.show();
     return 0;
 }
