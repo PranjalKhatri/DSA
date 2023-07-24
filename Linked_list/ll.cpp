@@ -1,5 +1,5 @@
 #include <iostream>
-#include <bits/stdc++.h>
+
 using namespace std;
 
 template <class T>
@@ -258,6 +258,22 @@ public:
         d->next = head;
     }
 
+    void remove_head()
+    {
+        if(head->next == head){head = nullptr;}
+        Node<T> * dum = head;
+        Node<T> * a = head;
+        while (dum->next != head)
+        {
+            dum = dum->next;
+        }
+        dum->next = head->next;
+        delete head;
+        head = dum->next;
+        // o->o
+        // |__|
+    }
+
     void free(){
         // Node<T>* dum = head;
         while (head != nullptr)
@@ -277,14 +293,5 @@ public:
 int main()
 {
     
-    circular_linkedlist<int> cll(10);
-    cll.push(11);
-    cll.push(12);
-    cll.push(13);
-    cll.show();
-    cll.Insert_at_head(9);
-    cll.show();
-    cll.free();
-    cll.show();
     return 0;
 }
