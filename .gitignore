@@ -1,7 +1,9 @@
 *.o
 *.exe
-/Linked_list/*.exe
+/Lists/*.exe
 /Array/*.exe
+/stack/*.exe
 /Array/test.cpp
-/Linked_list/test.cpp
+/Lists/test.cpp
+/stack/test.cpp
 .vscode
