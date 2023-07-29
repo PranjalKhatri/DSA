@@ -3,16 +3,16 @@
 namespace pop
 {
     template <class T>
-    class Stack
+    class Stack_ar
     {
     private:
         int size;
         int top;
-        T *arr;
+        T* arr;
 
     public:
         //@param ms max size
-        Stack(int ms)
+        Stack_ar(int ms)
         {
             size = ms;
             top = -1;
@@ -62,11 +62,93 @@ namespace pop
             }
         }
     };
+
+    template <class T>
+    class Stack {
+    private:
+        struct node {
+            T val;
+            node* next = nullptr;
+        }*top;
+    public:
+        Stack() {
+            top = nullptr;
+        }
+        void pop() {
+            if (is_empty()) {
+                std::cout << "Stack underflow\n";
+                return;
+            }
+            if (top->next == nullptr) {
+                top = nullptr;
+                return;
+            }
+            node* dum = top;
+            top = top->next;
+            delete dum;
+        }
+        void push(T v) {
+            if(is_full()){
+                std::cout<<"Stack overflow \n";
+            }
+            if (top == nullptr) {
+                top = new node;
+                top->val = v;
+                return;
+            }
+            node* dum = new node;
+            dum->val = v;
+            dum->next = top;
+            top = dum;
+        }
+        T peek(int index){
+            node * dum = top; 
+            while (index--)
+            {
+                dum = dum->next;
+            }
+            if(dum == nullptr){
+                std::cout<<"Out of bounds\n";
+                return INT16_MIN;
+            }
+            return dum->val;
+        }
+        void show() {
+            node* dum = top;
+            while (dum != nullptr)
+            {
+                std::cout << dum->val << std::endl;
+                dum = dum->next;
+            }
+
+        }
+        bool is_empty() {
+            return top == nullptr ? 1:0;
+        }
+        bool is_full() {
+            node* a = new node;
+            if (a == nullptr) {
+                delete a;
+                return true;
+            }
+            delete a;
+            return false;
+        }
+        T operator[](int i){
+            return peek(i);
+        }
+    };
+
 } // namespace pop
 
 using namespace pop;
 int main()
 {
-
+    Stack<int> s;
+    s.push(0);
+    s.push(1);
+    s.push(2);
+    s.show();
+    std::cout<<s[0];
     return 0;
 }
