@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "shared_mutex": "cpp",
-        "list": "cpp"
-    }
-}
