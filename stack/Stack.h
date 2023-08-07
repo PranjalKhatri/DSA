@@ -1,3 +1,5 @@
+#ifndef _STACK_H_
+#define _STACK_H_
 #include <iostream>
 
 namespace pop
@@ -140,15 +142,4 @@ namespace pop
     };
 
 } // namespace pop
-
-using namespace pop;
-int main()
-{
-    Stack<int> s;
-    s.push(0);
-    s.push(1);
-    s.push(2);
-    s.show();
-    std::cout<<s[0];
-    return 0;
-}
+#endif
