@@ -111,7 +111,7 @@ namespace pop
             }
             if(dum == nullptr){
                 std::cout<<"Out of bounds\n";
-                return T(INT16_MIN);
+                return 0;
             }
             return dum->val;
         }
