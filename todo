@@ -1,0 +1,4 @@
+-> use doxygen to generate documentation
+-> Separate code into .tpp files
+-> implement remaining dsa
+-> make use of iterators,containers etc..
