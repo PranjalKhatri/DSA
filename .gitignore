@@ -3,6 +3,7 @@
 /Lists/*.exe
 /Array/*.exe
 /stack/*.exe
+/queue/*.exe
 /Array/test.cpp
 /Lists/test.cpp
 /stack/test.cpp
