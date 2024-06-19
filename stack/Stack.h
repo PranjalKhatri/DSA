@@ -1,3 +1,5 @@
+#ifndef _STACK_H_
+#define _STACK_H_
 #include <iostream>
 
 namespace pop
@@ -66,6 +68,7 @@ namespace pop
     template <class T>
     class Stack {
     private:
+        int height = 0;
         struct node {
             T val;
             node* next = nullptr;
@@ -74,23 +77,27 @@ namespace pop
         Stack() {
             top = nullptr;
         }
-        void pop() {
+        T pop() {
             if (is_empty()) {
                 std::cout << "Stack underflow\n";
-                return;
+                return T(0);
             }
+            T v = top->val;
+            height--;
             if (top->next == nullptr) {
                 top = nullptr;
-                return;
+                return v;
             }
             node* dum = top;
             top = top->next;
             delete dum;
+            return v;
         }
         void push(T v) {
             if(is_full()){
                 std::cout<<"Stack overflow \n";
             }
+            height++;
             if (top == nullptr) {
                 top = new node;
                 top->val = v;
@@ -109,7 +116,7 @@ namespace pop
             }
             if(dum == nullptr){
                 std::cout<<"Out of bounds\n";
-                return INT16_MIN;
+                return 0;
             }
             return dum->val;
         }
@@ -137,18 +144,10 @@ namespace pop
         T operator[](int i){
             return peek(i);
         }
+        int get_height(){
+            return this->height;
+        }
     };
 
 } // namespace pop
-
-using namespace pop;
-int main()
-{
-    Stack<int> s;
-    s.push(0);
-    s.push(1);
-    s.push(2);
-    s.show();
-    std::cout<<s[0];
-    return 0;
-}
+#endif
