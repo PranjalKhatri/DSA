@@ -1,218 +1,433 @@
-#ifndef _P_ARRAY_H_
-#define _P_ARRAY_H_
+#ifndef _P_LISTS_H_
+#define _P_LISTS_H_
 #include <iostream>
+#include <stdexcept>
+namespace pop {
+	template <class T>
+	struct Node {
+		T val;
+		Node* next = nullptr;
+	};
 
-namespace pop
-{
-    template <class Array>
-    class ArrayIterator {
-    public:
-        using ValueType = typename Array::ValueType;
-        using PointerType = ValueType*;
-        using ReferenceType = ValueType&;
-    private:
-        PointerType m_ptr;
-    public:
-        ArrayIterator(PointerType ptr)
-            :m_ptr(ptr) {}
+	template <class T>
+	struct Dll_node {
+		Dll_node<T>* prev = nullptr;
+		T val;
+		Dll_node<T>* next = nullptr;
+	};
 
-        ArrayIterator& operator++()
-        {
-            m_ptr++;
-            return *this;
-        }
-        ArrayIterator& operator--()
-        {
-            m_ptr--;
-            return *this;
-        }
-        ReferenceType operator*()
-        {
-            return *m_ptr;
-        }
-        ArrayIterator operator++(int)
-        {
-            ArrayIterator tmp(*this);
-            operator++();
-            return tmp;
-        }
-        ArrayIterator operator--(int)
-        {
-            ArrayIterator tmp(*this);
-            operator--();
-            return tmp;
-        }
-        bool operator!=(const ArrayIterator& other)
-        {
-            return !(this->m_ptr == other.m_ptr);
-        }
-        bool operator==(const ArrayIterator& other) {
-            return (this->m_ptr == other.m_ptr);
-        }
-    };
+	template <class LinkedList>
+	class LinkedListIterator {
+	public:
+		using ValueType = typename LinkedList::ValueType;
+		using ReferenceType = Node<ValueType>&;
+		using PointerType = Node<ValueType>*;
+	public:
+		LinkedListIterator(PointerType ptr) : m_ptr(ptr) {}
+		ReferenceType operator*() { return *m_ptr; }
+		LinkedListIterator& operator++() {
+			m_ptr = m_ptr->next;
+			return *this;
+		}
+		LinkedListIterator operator++(int) {
+			LinkedListIterator tmp(*this);
+			m_ptr = m_ptr->next;
+			return tmp;
+		}
+		/*
+			---Singly linked list doesn't support these---
+		LinkedListIterator& operator--() {
+			--m_ptr;
+			return *this;
+		}
+		LinkedListIterator operator--(int) {
+			LinkedListIterator tmp(*this);
+			--m_ptr;
+			return tmp;
+		}*/
+		bool operator==(const LinkedListIterator& other) { return (m_ptr == other.m_ptr); }
+		bool operator!=(const LinkedListIterator& other) { return !(m_ptr == other.m_ptr); }
+	private:
+		PointerType m_ptr;
+	};
 
+	template <class T>
+	class LinkedList {
+	public:
+		using ValueType = T;
+		using ReferenceType = Node<T>&;
+		using PointerType = Node <T>*;
+		using Iterator = LinkedListIterator<LinkedList<T>>;
 
-    template <class T, int _size>
-    class Array
-    {
-    public:
-        using ValueType = T;
-        using Iterator = ArrayIterator<Array<T, _size>>;
-        using ReferenceType = T&;
-        using PointerType = T*;
-    private:
-        PointerType arr = nullptr;
-    public:
-        int total_size;
-        int used_size;
+	private:
+		Node<T>* start;
+		int size;
 
-        Array() : total_size(_size), used_size(0) { create(); };
+	public:
+		LinkedList() noexcept
+			: start(nullptr)
+			, size(0)
+		{
+		}
 
-        void create()
-        {
-            if (arr != nullptr)
-                delete[] arr;
-            total_size = _size;
-            arr = new T[total_size];
-            memset(arr, 0, total_size * sizeof(ValueType));
-        }
+		explicit LinkedList(T v) noexcept
+			: start(new Node<T>{ v, nullptr })
+			, size(1)
+		{
+		}
 
-        size_t size() const noexcept
-        {
-            return this->total_size;
-        }
+		Node<T>* gethead() const noexcept
+		{
+			return start;
+		}
 
-        size_t max_size()const noexcept {
-            return total_size;
-        }
+		void push(T v) noexcept
+		{
+			Node<T>* n = new Node<T>{ v, nullptr };
+			if (start == nullptr) {
+				start = n;
+			}
+			else {
+				Node<T>* dum = start;
+				while (dum->next != nullptr) {
+					dum = dum->next;
+				}
+				dum->next = n;
+			}
+			++size;
+		}
 
-        bool empty()const noexcept {
-            return (used_size == 0);
-        }
+		void Insert_at_start(T v) noexcept
+		{
+			if (start == nullptr) {
+				start = new Node<T>{ v, nullptr };
+			}
+			else {
+				Node<T>* n = new Node<T>{ start->val, start->next };
+				start->val = v;
+				start->next = n;
+			}
+			++size;
+		}
 
-        void show() const  noexcept
-        {
-            for (int i = 0; i < used_size; i++)
-            {
-                std::cout << arr[i] << std::endl;
-            }
-        }
+		void Insert_at_Index(T v, int i)
+		{
+			if (i < 0 || i > size) {
+				throw std::out_of_range("index out of bounds");
+			}
+			if (i == 0) {
+				Insert_at_start(v);
+				return;
+			}
+			Node<T>* dum = start;
+			for (int j = 0; j < (i - 1); ++j) {
+				dum = dum->next;
+			}
+			Node<T>* n = new Node<T>{ v, dum->next };
+			dum->next = n;
+			++size;
+		}
 
-        void destroy()
-        {
-            delete[] arr;
-            arr = nullptr;
-        }
+		void Insert_at_end(T v) noexcept
+		{
+			push(v);
+		}
 
-        ~Array()
-        {
-            delete[] arr;
-        }
+		void remove_head() noexcept
+		{
+			if (start == nullptr)
+				return;
+			Node<T>* dum = start;
+			start = start->next;
+			delete dum;
+			--size;
+		}
 
-        ReferenceType operator[](int i)  const
-        {
-            if (i >= total_size || i < 0)
-                throw std::out_of_range("array subscript out of range");
-            if (i > used_size) {
-                used_size = i + 1;
-            }
-            return (arr[i]);
-        }
+		void pop() noexcept
+		{
+			if (start == nullptr)
+				return;
+			if (start->next == nullptr) {
+				delete start;
+				start = nullptr;
+				size = 0;
+				return;
+			}
+			Node<T>* dum = start;
+			while (dum->next->next != nullptr) {
+				dum = dum->next;
+			}
+			delete dum->next;
+			dum->next = nullptr;
+			--size;
+		}
 
+		void remove_val(T v) noexcept
+		{
+			if (start == nullptr)
+				return;
+			if (start->val == v) {
+				remove_head();
+				return;
+			}
+			Node<T>* dum = start;
+			while (dum->next != nullptr && dum->next->val != v) {
+				dum = dum->next;
+			}
+			if (dum->next == nullptr) {
+				std::cout << "Value not found\n";
+				return;
+			}
+			Node<T>* d2 = dum->next->next;
+			delete dum->next;
+			dum->next = d2;
+			--size;
+		}
 
-        ReferenceType at(int index)  const
-        {
-            if (index < 0 || index >= total_size)
-                throw std::out_of_range("Index out of range");
-            else
-                return arr[index];
-        }
+		void remove_at_index(int i)
+		{
+			if (i < 0 || i >= size) {
+				throw std::out_of_range("index out of bounds");
+			}
+			if (i == 0) {
+				remove_head();
+				return;
+			}
+			Node<T>* dum = start;
+			for (int j = 0; j < (i - 1); ++j) {
+				dum = dum->next;
+			}
+			Node<T>* d2 = dum->next->next;
+			delete dum->next;
+			dum->next = d2;
+			--size;
+		}
 
-        void insert_at(T ele, int pos) {
-            if (used_size >= (total_size - 1)) {
-                std::cout << "Array out of bounds\n";
-                return;
-            }
-            if (pos < 0 || pos > used_size) {
-                std::cout << "Invalid position\n";
-                return;
-            }
-            for (int i = used_size; i > pos; --i) {
-                arr[i] = arr[i - 1];
-            }
-            arr[pos] = ele;
-            ++used_size;
-        }
+		void free() noexcept
+		{
+			while (start != nullptr) {
+				remove_head();
+			}
+		}
 
-        void remove_at(int pos)
-        {
-            if (pos < 0 || pos > used_size)
-            {
-                return;
-            }
-            for (int i = pos; i < (used_size - 1); i++)
-            {
-                arr[i] = arr[i + 1];
-            }
-            used_size--;
-        }
+		void show() const noexcept
+		{
+			Node<T>* dummy = start;
+			while (dummy != nullptr) {
+				std::cout << dummy->val << std::endl;
+				dummy = dummy->next;
+			}
+		}
 
-        int linear_search(T ele)  const
-        {
-            for (int i = 0; i < used_size; i++)
-            {
-                if (arr[i] == ele)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
+		int get_size() const noexcept
+		{
+			return size;
+		}
 
-        int binary_search(T ele, int s, int e)  const
-        {
-            int mid;
-            while (s <= e)
-            {
+		~LinkedList() noexcept
+		{
+			free();
+		}
 
-                mid = int((s + e) / 2);
-                if (arr[mid] == ele)
-                {
-                    // std::cout<<"duh";
-                    return mid;
-                }
-                else if (arr[mid] > ele)
-                {
-                    e = mid - 1;
-                }
-                else
-                {
-                    s = mid + 1;
-                }
-            }
-            return -1;
-        }
+		Iterator begin() noexcept{
+			return Iterator(start);
+		}
+		Iterator end() noexcept{
+			return nullptr;
+		}
+	};
 
-        Iterator begin() noexcept
-        {
-            return Iterator(arr);
-        }
+	template <class T>
+	class circular_linkedlist {
+	private:
+		Node<T>* head;
 
-        Iterator end() noexcept {
-            return Iterator(arr + used_size);
-        }
+	public:
+		circular_linkedlist() { head = new Node<T>; }
 
-        ReferenceType front() noexcept {
-            return arr[0];
-        }
-        ReferenceType back()  noexcept {
-            return arr[used_size - 1];
-        }
+		circular_linkedlist(T v)
+		{
+			head = new Node<T>;
+			head->next = head;
+			head->val = v;
+			// std::cout<<":)";
+		}
 
-        PointerType data()  noexcept
-        {
-            return arr;
-        }
-    };
-}
+		void push(T v)
+		{
+			if (head == nullptr) {
+				head = new Node<T>;
+				head->val = v;
+				head->next = head;
+				return;
+			}
+			Node<T>* n = new Node<T>;
+			n->val = v;
+			Node<T>* hd = head;
+			while (hd->next != head) {
+				hd = hd->next;
+			}
+			n->next = head;
+			hd->next = n;
+		}
+
+		void Insert_at_head(T v)
+		{
+			Node<T>* n = new Node<T>;
+			n->val = v;
+			n->next = head;
+			Node<T>* dum = head;
+			while (dum->next != head) {
+				dum = dum->next;
+			}
+			dum->next = n;
+			head = n;
+		}
+
+		void show()
+		{
+			Node<T>* dm = head;
+			do {
+				std::cout << dm->val << std::endl;
+				dm = dm->next;
+			} while (dm != head);
+		}
+
+		void pop()
+		{
+			if (head == nullptr) {
+				return;
+			}
+			if (head->next == head) {
+				// std::cout<<"popped head \n";
+				head = nullptr;
+			}
+			Node<T>* d = head;
+			while (d->next->next != head) {
+				d = d->next;
+			}
+			// std::cout<<"popped "<<d->next->val<<std::endl;
+			delete d->next;
+			d->next = head;
+		}
+
+		void remove_head()
+		{
+			if (head->next == head) {
+				head = nullptr;
+			}
+			Node<T>* dum = head;
+			Node<T>* a = head;
+			while (dum->next != head) {
+				dum = dum->next;
+			}
+			dum->next = head->next;
+			delete head;
+			head = dum->next;
+			// o->o
+			// |__|
+		}
+
+		void free()
+		{
+			// Node<T>* dum = head;
+			while (head != nullptr) {
+
+				pop();
+			}
+		}
+
+		~circular_linkedlist()
+		{
+			free();
+		}
+	};
+
+	template <class T>
+	class Doubly_linkedlist {
+	private:
+		Dll_node<T>* head;
+
+	public:
+		Doubly_linkedlist()
+		{
+			head = nullptr;
+		}
+		Doubly_linkedlist(T v)
+		{
+			head = new Dll_node<T>;
+			head->val = v;
+		}
+		void push(T v)
+		{
+			if (head == nullptr) {
+				head = new Dll_node<T>;
+				head->val = v;
+				return;
+			}
+
+			Dll_node<T>* n = new Dll_node<T>;
+			n->val = v;
+			Dll_node<T>* dum = head;
+			while (dum->next != nullptr) {
+				dum = dum->next;
+			}
+			dum->next = n;
+			n->prev = dum;
+		}
+		void Insert_at_head(T v)
+		{
+			Dll_node<T>* n = new Dll_node<T>;
+			n->val = v;
+			head->prev = n;
+			n->next = head;
+			head = n;
+		}
+		void pop()
+		{
+			if (head == nullptr || head->next == nullptr) {
+				head = nullptr;
+				return;
+			}
+			Dll_node<T>* dum = new Dll_node<T>;
+			while (dum->next->next != nullptr) {
+				dum = dum->next;
+			}
+			delete dum->next;
+			dum->next = nullptr;
+		}
+		void remove_head()
+		{
+			Dll_node<T>* dum = head;
+			head = head->next;
+			head->prev = nullptr;
+			delete dum;
+		}
+		void show()
+		{
+			Dll_node<T>* dum = head;
+			while (dum != nullptr) {
+				std::cout << dum->val << std::endl;
+				dum = dum->next;
+			}
+		}
+		void free()
+		{
+			Dll_node<T>* dum = head;
+			while (head != nullptr) {
+				dum = head->next;
+				std::cout << "deleted " << head->val << std::endl;
+				delete head;
+				head = dum;
+			}
+		}
+		~Doubly_linkedlist()
+		{
+			free();
+		}
+	};
+
+} // namespace pop
+
 #endif
+
