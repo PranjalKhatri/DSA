@@ -16,15 +16,18 @@ namespace pop {
         Dll_node<T>* next = nullptr;
     };
 
+
     template <class LinkedList>
     class LinkedListIterator {
     public:
-        using ValueType = typename LinkedList::ValueType;
-        using ReferenceType = Node<ValueType>&;
-        using PointerType = Node<ValueType>*;
+        using value_type = typename LinkedList::value_type;
+        using reference = value_type > &;
+        using pointer = value_type*;
+        using difference_type = std::ptrdiff_t
     public:
         LinkedListIterator(PointerType ptr) : m_ptr(ptr) {}
-        ReferenceType operator*() { return *m_ptr; }
+        value_type& operator*() { return m_ptr->val; }
+        pointer operator->() { return &m_ptr->data; }
         LinkedListIterator& operator++() {
             m_ptr = m_ptr->next;
             return *this;
@@ -34,6 +37,7 @@ namespace pop {
             m_ptr = m_ptr->next;
             return tmp;
         }
+
         /*
             ---Singly linked list doesn't support these---
         LinkedListIterator& operator--() {
@@ -45,6 +49,20 @@ namespace pop {
             --m_ptr;
             return tmp;
         }*/
+        bool operator>(const LinkedListIterator& rhs)
+        {
+            return (this->m_ptr->val > rhs.m_ptr->val);
+        }
+        bool operator<(const LinkedListIterator& rhs)
+        {
+            return (this->m_ptr->val < rhs.m_ptr->val);
+        }
+        bool operator<=(const LinkedListIterator& other) {
+            return (m_ptr->val <= rhs.m_ptr->val);
+        }
+        bool operator>=(const LinkedListIterator& other) {
+            return (m_ptr->val >= rhs.m_ptr->val);
+        }
         bool operator==(const LinkedListIterator& other) { return (m_ptr == other.m_ptr); }
         bool operator!=(const LinkedListIterator& other) { return !(m_ptr == other.m_ptr); }
     private:
@@ -53,10 +71,13 @@ namespace pop {
 
     template <class T>
     class LinkedList {
+        /*
+        Implement sort as it doesn't provide a random access iterator
+        */
     public:
-        using ValueType = T;
-        using ReferenceType = Node<T>&;
-        using PointerType = Node <T>*;
+        using value_type = T;
+        using reference = T&;
+        using pointer = T*;
         using Iterator = LinkedListIterator<LinkedList<T>>;
 
     private:
@@ -235,6 +256,7 @@ namespace pop {
         Iterator end() noexcept {
             return nullptr;
         }
+    
     };
 
     template <class T>
@@ -430,10 +452,3 @@ namespace pop {
 } // namespace pop
 
 #endif
-
-int main(int argc, char const* argv[])
-{
-    pop::LinkedList<int> ll(10);
-    // pop::LinkedList<int>::Iterator it = ll.Begin();
-    return 0;
-}
