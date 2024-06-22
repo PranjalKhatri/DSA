@@ -15,56 +15,92 @@ namespace pop
 	private:
 		pointer m_ptr;
 	public:
+		/// @brief constructor for random access iterator
+		/// @param ptr ptr to array base
 		ArrayIterator(pointer ptr)
 			:m_ptr(ptr) {}
-
+		/// @brief prefix operator ++
+		/// @return pointer to next element in array
 		ArrayIterator& operator++()
 		{
 			m_ptr++;
 			return *this;
 		}
+		/// @brief prefix operator --
+		/// @return pointer to previous element in array
 		ArrayIterator& operator--()
 		{
 			m_ptr--;
 			return *this;
 		}
+		/// @brief dereference operator *
+		/// @return the value pointed by the iterator
 		reference operator*()
 		{
 			return *m_ptr;
 		}
+		/// @brief Arrow operator ->
+		/// @return return the current pointer
 		pointer operator->() { return m_ptr; }
+		/// @brief postfix increment operator++
+		/// @param  int syntax
+		/// @return a temp iterator with current pointer and increment the pointer
 		ArrayIterator operator++(int)
 		{
 			ArrayIterator tmp(*this);
 			operator++();
 			return tmp;
 		}
+		/// @brief postfix decrement operator--
+		/// @param  int syntax
+		/// @return a temp iterator with current pointer and decrement the pointer
 		ArrayIterator operator--(int)
 		{
 			ArrayIterator tmp(*this);
 			operator--();
 			return tmp;
 		}
+		/// @brief shifts the operator by offset 
+		/// @param offset number of elements to shift
+		/// @return the iterator to new position
 		ArrayIterator& operator+=(difference_type offset) { m_ptr += offset; return *this; }
+		/// @brief shifts the operator by offset
+		/// @param offset number of elements to shift
+		/// @return the iterator to new position
 		ArrayIterator& operator-=(difference_type offset) { m_ptr -= offset; return *this; }
+		/// @brief operator+ to shift return new iterator that we will get after shifting by offset elements
+		/// @param offset the number of elements to shift
+		/// @return the iterator to new position
 		ArrayIterator operator+(difference_type offset) const { return ArrayIterator(m_ptr + offset); }
+		/// @brief operator+ to shift return new iterator that we will get after shifting by offset elements
+		/// @param offset the number of elements to shift
+		/// @return the iterator to new position
 		ArrayIterator operator-(difference_type offset) const { return ArrayIterator(m_ptr - offset); }
+		/// @brief get number of elements between two iterators
+		/// @param other the iterator to subtract
+		/// @return the number of elements between
 		difference_type operator-(const ArrayIterator& other) const { return m_ptr - other.m_ptr; }
+		/// @brief use to access elements like array
+		/// @param index the index to get reference to
+		/// @return reference to the element (base + ind)
 		reference operator[](difference_type index) const { return m_ptr[index]; }
+		/// @return whether this iterator points to element before the input iterator
 		bool operator<(const ArrayIterator& other) const { return m_ptr < other.m_ptr; }
+		/// @return whether this iterator points to element after the input iterator
 		bool operator>(const ArrayIterator& other) const { return m_ptr > other.m_ptr; }
+		/// @return whether this iterator points to element before/equals the input iterator
 		bool operator<=(const ArrayIterator& other) const { return m_ptr <= other.m_ptr; }
+		/// @return whether this iterator points to element after/equals the input iterator
 		bool operator>=(const ArrayIterator& other) const { return m_ptr >= other.m_ptr; }
-
+		/// @return false if both points to same else true
 		bool operator!=(const ArrayIterator& other)
 		{
 			return !(this->m_ptr == other.m_ptr);
 		}
+		/// @return true if both points to same else false
 		bool operator==(const ArrayIterator& other) {
 			return (this->m_ptr == other.m_ptr);
 		}
-
-
 	};
 
 
