@@ -20,6 +20,7 @@ namespace pop {
     template <class LinkedList>
     class LinkedListIterator {
     public:
+        using iterator_category = std::forward_iterator_tag;
         using value_type = typename LinkedList::value_type;
         using reference = value_type > &;
         using pointer = value_type*;
@@ -97,7 +98,7 @@ namespace pop {
         {
         }
 
-        Node<T>* gethead() const noexcept
+        Node<T>* GetHead() const noexcept
         {
             return start;
         }
@@ -256,7 +257,7 @@ namespace pop {
         Iterator end() noexcept {
             return nullptr;
         }
-    
+
     };
 
     template <class T>
@@ -364,6 +365,62 @@ namespace pop {
             free();
         }
     };
+
+
+    template <class DoublyLinkedList>
+    class DoublyLinkedListIterator {
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = typename DoublyLinkedList::value_type;
+        using reference = value_type > &;
+        using pointer = value_type*;
+        using difference_type = std::ptrdiff_t
+    public:
+        LinkedListIterator(PointerType ptr) : m_ptr(ptr) {}
+        value_type& operator*() { return m_ptr->val; }
+        pointer operator->() { return &m_ptr->data; }
+        LinkedListIterator& operator++() {
+            m_ptr = m_ptr->next;
+            return *this;
+        }
+        LinkedListIterator operator++(int) {
+            LinkedListIterator tmp(*this);
+            m_ptr = m_ptr->next;
+            return tmp;
+        }
+
+        /*
+            ---Doubly linked list  support these---
+        */
+        LinkedListIterator& operator--() {
+            --m_ptr;
+            return *this;
+        }
+        LinkedListIterator operator--(int) {
+            LinkedListIterator tmp(*this);
+            --m_ptr;
+            return tmp;
+        }
+        bool operator>(const LinkedListIterator& rhs)
+        {
+            return (this->m_ptr->val > rhs.m_ptr->val);
+        }
+        bool operator<(const LinkedListIterator& rhs) const
+        {
+            return (this->m_ptr->val < rhs.m_ptr->val);
+        }
+        bool operator<=(const LinkedListIterator& other) const {
+            return (m_ptr->val <= rhs.m_ptr->val);
+        }
+        bool operator>=(const LinkedListIterator& other) const {
+            return (m_ptr->val >= rhs.m_ptr->val);
+        }
+        bool operator==(const LinkedListIterator& other) { return (m_ptr == other.m_ptr); }
+        bool operator!=(const LinkedListIterator& other) { return !(m_ptr == other.m_ptr); }
+    private:
+        PointerType m_ptr;
+    };
+
 
     template <class T>
     class Doubly_linkedlist {

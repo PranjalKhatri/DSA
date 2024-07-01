@@ -1,7 +1,7 @@
 #ifndef __QUEUE_HPP__
 #define __QUEUE_HPP__
 #include <iostream>
-
+#include <exception>
 namespace pop
 {
     template<class T>
@@ -19,18 +19,17 @@ namespace pop
         queue();
         bool enqueue(T val);
         void dequeue(T val);
-        T peek(int index);
-        bool is_empty();
+        T at(int index) const;
+        bool is_empty()const noexcept;
+        T peek() const;
         bool is_full();
         void show();
         ~queue();
     };
 
     template<class T>
-    queue<T>::queue()
+    queue<T>::queue(): first(nullptr), last(nullptr)
     {
-        first = nullptr;
-        last = first;
     }
 
     template<class T>
@@ -55,6 +54,13 @@ namespace pop
         }
         return true;
     }
+    template<class T>
+    T queue<T>::peek() const {
+        if(is_empty()){
+            throw std::invalid_argument("Queue is empty!!");
+        }
+        return first->val;
+    }
 
     template<class T>
     void queue<T>::dequeue(T val)
@@ -65,22 +71,23 @@ namespace pop
     }
 
     template<class T>
-    T queue<T>::peek(int index)
+    T queue<T>::at(int index)const
     {
         node* temp = first;
         for (int i = 0; i < index; i++)
         {
             temp = temp->next;
             if (temp == nullptr) {
-                std::cerr << "index out of bounds!" << std::endl;
-                return T(NULL);
+                throw std::out_of_range("Index not in queue!")
+                // std::cerr << "index out of bounds!" << std::/endl;
+                // return T(NULL);
             }
         }
         return temp->val;
     }
 
     template<class T>
-    bool queue<T>::is_empty()
+    bool queue<T>::is_empty() const noexcept
     {
         return first == last;
     }
@@ -122,3 +129,5 @@ namespace pop
 } // namespace pop
 
 #endif
+
+
