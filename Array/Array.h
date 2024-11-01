@@ -1,5 +1,5 @@
-#ifndef _P_ARRAY_H_
-#define _P_ARRAY_H_
+#ifndef P_ARRAY_H
+#define P_ARRAY_H
 #include <iostream>
 #include<cstddef>
 namespace pop

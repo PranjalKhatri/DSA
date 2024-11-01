@@ -1,5 +1,5 @@
-#ifndef __QUEUE_HPP__
-#define __QUEUE_HPP__
+#ifndef QUEUE_HPP
+#define QUEUE_HPP
 #include <iostream>
 #include <exception>
 namespace pop
@@ -12,13 +12,13 @@ namespace pop
             T val;
             node* next = nullptr;
         };
-        int size = 0;
+        int size;
         node* first;
         node* last;
     public:
         queue();
         bool enqueue(T val);
-        void dequeue(T val);
+        void dequeue();
         T at(int index) const;
         bool is_empty()const noexcept;
         T peek() const;
@@ -28,7 +28,7 @@ namespace pop
     };
 
     template<class T>
-    queue<T>::queue(): first(nullptr), last(nullptr)
+    queue<T>::queue(): first(nullptr), last(nullptr),size(0)
     {
     }
 
@@ -52,6 +52,7 @@ namespace pop
             last->next = temp;
             last = temp;
         }
+        size++;
         return true;
     }
     template<class T>
@@ -63,11 +64,16 @@ namespace pop
     }
 
     template<class T>
-    void queue<T>::dequeue(T val)
+    void queue<T>::dequeue()
     {
+        if(first == nullptr){
+            return;
+        }
+        size--;
         node* temp = first->next;
         delete first;
         first = temp;
+        if(first == nullptr)last = nullptr;
     }
 
     template<class T>
@@ -89,7 +95,7 @@ namespace pop
     template<class T>
     bool queue<T>::is_empty() const noexcept
     {
-        return first == last;
+        return first == nullptr;
     }
 
     template<class T>

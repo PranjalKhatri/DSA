@@ -1,5 +1,5 @@
-#ifndef _P_LISTS_H_
-#define _P_LISTS_H_
+#ifndef P_LISTS_H
+#define P_LISTS_H
 #include <iostream>
 #include <stdexcept>
 namespace pop {
@@ -22,7 +22,7 @@ namespace pop {
     public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = typename LinkedList::value_type;
-        using reference = value_type > &;
+        using reference = value_type&;
         using pointer = value_type*;
         using difference_type = std::ptrdiff_t
     public:
@@ -372,7 +372,7 @@ namespace pop {
     public:
         using iterator_category = std::bidirectional_iterator_tag;
         using value_type = typename DoublyLinkedList::value_type;
-        using reference = value_type > &;
+        using reference = value_type&;
         using pointer = value_type*;
         using difference_type = std::ptrdiff_t
     public:
