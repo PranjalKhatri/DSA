@@ -9,6 +9,6 @@
 /stack/test.cpp
 .vscode
 /practice
-*.cpp
+/*.cpp
 *.c
 makefile
